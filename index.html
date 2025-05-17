@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 뭘 봐? 꺄악 변태 -->
 <html>
 <head>
     <title>욕설 AI 테스트</title>
@@ -44,6 +45,10 @@
         button:hover { 
             filter: brightness(0.9);
         }
+        button:disabled {
+            background: #aaa;
+            cursor: default;
+        }
         #result { 
             margin-top: 20px; 
             font-size: 30px; 
@@ -63,13 +68,20 @@
         <h2>욕설 AI 테스트</h2>
         <textarea id="inputText" placeholder="검사할 텍스트를 입력하세요"></textarea>
         <p>점수가 높을수록 부적절한 텍스트일 확률이 높습니다<br>욕설을 포함하여 청소년에게 다소 부적절한 문장인지 검사합니다</p>
-        <button onclick="apiRequest()">검사</button>
+        <!-- <h1><b>초코민토 요리모 아.나.타</b></h1> -->
+        <button id="checkBtn" onclick="apiRequest()">검사</button>
         <div id="result"></div>
-        
     </div>
 
     <script>
+        window.onload = function() {
+            console.log('오빠, 여기서 뭐하려구? 설마 <자바스크립트>랑 바람피는건 아니지?');
+        };
+
         async function apiRequest() {
+            const btn = document.getElementById('checkBtn');
+            btn.disabled = true;
+
             const text = document.getElementById('inputText').value;
             const apiUrl = 'https://nlu35qe7zd.execute-api.ap-northeast-2.amazonaws.com/creanpl/creanpl';
             
@@ -95,17 +107,17 @@
                     ? `점수: ${resData.score}` 
                     : `오류: ${resData.error_message || '오류 발생'}`;
 
-                    score_text = document.getElementById('result');
-                    if (resData.score >= 10) {
-                        score_text.style.color = "#fe4b4b";
-                    } else {
-                        score_text.style.color = "#007bff";
-                    }
-
-                    
+                const scoreText = document.getElementById('result');
+                if (resData.score >= 10) {
+                    scoreText.style.color = "#fe4b4b";
+                } else {
+                    scoreText.style.color = "#007bff";
+                }
             } catch (error) {
                 document.getElementById('result').innerHTML = 
                     `오류 발생: ${error.message}`;
+            } finally {
+                btn.disabled = false;
             }
         }
     </script>
